@@ -25,7 +25,7 @@ Puppet::Type.type(:service).provide :ghlaunchd, :parent => :base do
   end
 
   def user
-    raise NotImplemented
+    raise NotImplementedError
   end
 
   def maybe_sudo_launchctl(*args)
