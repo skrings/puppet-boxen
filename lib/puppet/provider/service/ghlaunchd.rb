@@ -25,12 +25,12 @@ Puppet::Type.type(:service).provide :ghlaunchd, :parent => :base do
   end
 
   def user
-    raise NotImplementedError
+    config['UserName'] if config['UserName'] && config['UserName'] != 'root'
   end
 
   def maybe_sudo_launchctl(*args)
     if user then
-      sudo('-u', user, commands[:launchctl], *args)
+      sudo('-u', user, command(:launchctl), *args)
     else
       launchctl(*args)
     end

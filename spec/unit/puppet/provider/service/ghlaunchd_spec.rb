@@ -26,12 +26,13 @@ describe Puppet::Type.type(:service).provider(:ghlaunchd) do
     end
 
     it "should sudo to user if user is defined" do
+      subject.stubs(:plutil).returns('{}')
       Dir.stubs(:glob).returns(['/Library/LaunchAgents/some.vendor.service.plist'])
 
       subject.stubs(:user).returns('some_user')
-      subject.expects(:maybe_sudo_launchctl).with(:load, '-w', '/Library/LaunchAgents/some.vendor.service.plist')
-      subject.expects(:maybe_sudo_launchctl).with(:start, 'some.vendor.service')
-      subject.expects(:sudo).with('-u', 'some_user', :start, 'some.vendor.service')
+      subject.stubs(:command).with(:launchctl).returns('/bin/launchctl')
+      subject.expects(:sudo).with('-u', 'some_user', '/bin/launchctl', :load, '-w', '/Library/LaunchAgents/some.vendor.service.plist')
+      subject.expects(:sudo).with('-u', 'some_user', '/bin/launchctl', :start, 'some.vendor.service')
       subject.start
     end
   end
