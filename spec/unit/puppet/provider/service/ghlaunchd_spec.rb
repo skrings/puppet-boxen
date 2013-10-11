@@ -45,9 +45,9 @@ describe Puppet::Type.type(:service).provider(:ghlaunchd) do
     end
 
     context "without some service plist" do
-      Dir.stubs(:glob).returns([])
 
       it "should not load a launch agent" do
+        Dir.stubs(:glob).returns([])
         Facter.stubs(:fact).with(:boxen_user).returns(stub(:value => 'some_user'))
 
         subject.stubs(:command).with(:launchctl).returns('/bin/launchctl')
@@ -56,6 +56,8 @@ describe Puppet::Type.type(:service).provider(:ghlaunchd) do
       end
 
       it "should not load a launch deamon" do
+        Dir.stubs(:glob).returns([])
+
         subject.expects(:launchctl).with(:load).never()
         subject.start.should be_false
       end
@@ -86,9 +88,9 @@ describe Puppet::Type.type(:service).provider(:ghlaunchd) do
     end
 
     context "without some service plist" do
-      Dir.stubs(:glob).returns([])
 
       it "should not unload a launch agent" do
+        Dir.stubs(:glob).returns([])
         Facter.stubs(:fact).with(:boxen_user).returns(stub(:value => 'some_user'))
 
         subject.stubs(:command).with(:launchctl).returns('/bin/launchctl')
@@ -97,6 +99,8 @@ describe Puppet::Type.type(:service).provider(:ghlaunchd) do
       end
 
       it "should not unload a launch deamon" do
+        Dir.stubs(:glob).returns([])
+
         subject.expects(:launchctl).with(:unload).never()
         subject.stop.should be_false
       end
